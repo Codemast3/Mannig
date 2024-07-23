@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.mannig.R
 import org.w3c.dom.Text
 
-class Introactivity : baseactivity() {
+class Introactivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
