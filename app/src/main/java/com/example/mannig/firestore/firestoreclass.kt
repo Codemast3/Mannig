@@ -1,7 +1,6 @@
 package com.example.mannig.firestore
 
 import android.app.Activity
-import android.provider.ContactsContract.CommonDataKinds.Email
 import android.util.Log
 import android.widget.Toast
 import com.example.mannig.activities.Createboardacitivity
@@ -16,16 +15,14 @@ import com.example.mannig.models.Board
 import com.example.mannig.models.User
 import com.example.mannig.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import kotlin.math.log
 
 
 class firestoreclass {
     private val mfirestore = FirebaseFirestore.getInstance()
 
-    fun registeruser(activity: Signup,userInfo: com.example.mannig.models.User){
+    fun registeruser(activity: Signup,userInfo: User){
         mfirestore.collection(Constants.USERS)
             .document(getCurrentuserid())
             .set(userInfo, SetOptions.merge()).addOnSuccessListener {
@@ -129,18 +126,18 @@ class firestoreclass {
             .document(getCurrentuserid())
             .get().addOnSuccessListener { document->
                 Log.e(activity.javaClass.simpleName, document.toString())
-              val Loggedinuser = document.toObject(User::class.java)
-               if(Loggedinuser!=null)
+              val loggedinuser = document.toObject(User::class.java)
+               if(loggedinuser!=null)
                    when(activity){
                        is Signinactivity->{
-                           activity.signInsuccess(Loggedinuser)
+                           activity.signInsuccess(loggedinuser)
 
                        }
                        is MainActivity->{
-                           activity.updatenavigationuserdetails(Loggedinuser,readBoardslist)
+                           activity.updatenavigationuserdetails(loggedinuser,readBoardslist)
                        }
                        is MyProfileActivity->{
-                           activity.setuserdatainui(Loggedinuser)
+                           activity.setuserdatainui(loggedinuser)
 
                        }
                    }
@@ -149,11 +146,12 @@ class firestoreclass {
     }
 
     fun getCurrentuserid(): String{
-        var currentuser = FirebaseAuth.getInstance().currentUser
-        var currentuserid = " "
+        val currentuser = FirebaseAuth.getInstance().currentUser
 
-            if (currentuser != null) {
-                currentuserid=currentuser.uid
+
+         var currentuserid = ""
+          if (currentuser != null) {
+               currentuserid=currentuser.uid
             }
 
         return currentuserid
@@ -247,7 +245,5 @@ class firestoreclass {
 
     }
 
-    fun assignedmembertoboard(activity: tasklistactivity, board: ArrayList<String>) {
 
-    }
 }

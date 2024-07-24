@@ -3,6 +3,7 @@ package com.example.mannig.activities
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.WindowManager
 import android.view.WindowManager.*
 import androidx.activity.enableEdgeToEdge
@@ -27,9 +28,9 @@ class Splashactivity : AppCompatActivity() {
 
 
 
-        Handler().postDelayed({
-            var curretuserid=firestoreclass().getCurrentuserid()
-            if(curretuserid.isNotEmpty()){
+        Handler(Looper.getMainLooper()).postDelayed({
+            val currentuserid=firestoreclass().getCurrentuserid()
+            if(currentuserid.isNotEmpty()){
                 startActivity(Intent(this, MainActivity::class.java))
 
 

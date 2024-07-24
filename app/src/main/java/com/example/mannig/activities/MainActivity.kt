@@ -69,10 +69,18 @@ class MainActivity : baseactivity(), NavigationView.OnNavigationItemSelectedList
             firestoreclass().Loaduserdata(this,true)
 
         }else{
-           getFCMToken()
+            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val token = task.result
+                   updatefcmtoken(token)
+                } else {
+                    // Handle the error
+                    Log.e("FCM", "Fetching FCM registration token failed", task.exception)
+                }
+            }
 
         }
-        firestoreclass().Loaduserdata(this,true)
+
 
         val fab: FloatingActionButton = findViewById(id.fab_create_board)
         fab.setOnClickListener{
@@ -86,23 +94,7 @@ class MainActivity : baseactivity(), NavigationView.OnNavigationItemSelectedList
 
 
     }
-    private fun getFCMToken() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                return@addOnCompleteListener
-            }
 
-            // Get new FCM registration token
-            val token = task.result
-
-            // Log and toast
-
-
-            // Update the token in the Firestore database
-            updatefcmtoken(token)
-        }
-    }
     fun populateboardlist(boardList: ArrayList<Board>){
         val rvboardlist: RecyclerView = findViewById(id.rv_boards_list)
         val tvnobords: TextView = findViewById(id.tv_no_boards_available)
